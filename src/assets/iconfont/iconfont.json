@@ -1,0 +1,30 @@
+{
+  "id": "1533338",
+  "name": "工单系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5881137",
+      "name": "车辆",
+      "font_class": "cheliang",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "6507456",
+      "name": "首页",
+      "font_class": "shouye-copy",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "11837025",
+      "name": "个人中心 - 未选中",
+      "font_class": "gerenzhongxin-xuanzhongcopy",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    }
+  ]
+}
