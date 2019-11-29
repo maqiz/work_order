@@ -4,6 +4,27 @@ import Loadable from '@loadable/component'
 /* 有菜单模块 */
 const routerMenu = [
     {
+        key: 'vehicle',
+        exact: true,
+        auth: false,
+        path: '/vehicle',
+        component: Loadable(() => import('@/views/vehicle'))
+    },
+    {
+        key: 'workOrder',
+        exact: true,
+        auth: false,
+        path: '/workOrder',
+        component: Loadable(() => import('@/views/work-order'))
+    },
+    {
+        key: 'center',
+        exact: true,
+        auth: false,
+        path: '/center',
+        component: Loadable(() => import('@/views/center'))
+    },
+    {
         key: 'home',
         exact: true,
         auth: false,

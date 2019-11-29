@@ -30,7 +30,7 @@ const handleErrorTips = (status: number) => {
 }
 
 /* 创建axios实例 */
-const instance = axios.create({
+const Axios = axios.create({
     baseURL: baseUrl,
     responseType: 'json', // 数据格式
     timeout: 10000,
@@ -40,7 +40,7 @@ const instance = axios.create({
 });
 
 // 添加请求拦截器
-instance.interceptors.request.use( (config: AxiosRequestConfig) => {
+Axios.interceptors.request.use( (config: AxiosRequestConfig) => {
     const { method } = config
     // 在发送请求之前做些什么
     // 请求 access_token，登录后每个请求都带上
@@ -57,7 +57,7 @@ instance.interceptors.request.use( (config: AxiosRequestConfig) => {
 });
 
 // 添加响应拦截器
-instance.interceptors.response.use( (response: AxiosResponse) => {
+Axios.interceptors.response.use( (response: AxiosResponse) => {
     // 对响应数据做点什么
     if( response.status === 404) {
         return null
@@ -71,4 +71,4 @@ instance.interceptors.response.use( (response: AxiosResponse) => {
     return Promise.reject(error);
 });
 
-export default instance
+export default Axios

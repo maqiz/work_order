@@ -6,6 +6,23 @@ import HomeApi from '@/api/home'
 
 class Home extends React.Component{
 
+    state = {
+        infoData: [
+            {
+                name: '上架',
+                value: '78'
+            },
+            {
+                name: '待维护',
+                value: '256'
+            },
+            {
+                name: '工单',
+                value: '50'
+            }
+        ]
+    }
+
     fetchVehicleCluster = () => {
         
         const param = {
@@ -24,9 +41,31 @@ class Home extends React.Component{
         this.fetchVehicleCluster()
     }
 
+    componentWillMount(){
+        this.setState = (state, callback) => { return false }
+    }
+
     render(){
-        console.log(this.props)
+        
+        const { infoData } = this.state
+
         return <div className={styles['container']}>
+            <div className={styles['info']}>
+                <div className={styles['info-head']}>
+                    <div className={styles['info-number']}>165</div>
+                    <div className={styles['info-nane']}>车辆总数</div>
+                </div>
+                <ul className={styles['info-list']}>
+                    {
+                        infoData.map( (item, index)  => {
+                            return <li key={index} className={styles['info-item']}>
+                            <div className={styles['info-number']}>{item.value}</div>
+                            <div className={styles['info-nane']}>{item.name}</div>
+                        </li>
+                        })
+                    }
+                </ul>
+            </div>
             <div className={styles['map']}>
                 <Amap />
             </div>
