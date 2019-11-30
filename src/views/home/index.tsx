@@ -25,12 +25,11 @@ class Home extends React.Component{
 
     fetchVehicleCluster = () => {
         
-        const param = {
+        const params = {
             rectangle: '118.796424,32.085187,118.77488,32.00596',
-
         }
 
-        HomeApi.fetchVehicleCluster({param}).then(data => {
+        HomeApi.fetchVehicleCluster({params}).then(data => {
             console.log(data)
         }).catch( error => {
             console.log(error)

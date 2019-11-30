@@ -44,6 +44,7 @@ Axios.interceptors.request.use( (config: AxiosRequestConfig) => {
     const { method } = config
     // 在发送请求之前做些什么
     // 请求 access_token，登录后每个请求都带上
+    config.headers.Authorization = 'Bearer ttronf8ab323dcdfce2b2625219bd3fe'
     if (Cache.getItem('access_token')) {
         config.headers.Authorization = `Bearer ${Cache.getItem('access_token')}`;
     }
