@@ -1,2 +1,21 @@
 /* 全局变量名称 */
 $primary: #0084FF;
+/* 边框颜色 */
+$borderColor: #e5e5e5;
+
+@mixin line-limit {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}

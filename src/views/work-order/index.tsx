@@ -23,6 +23,12 @@ class WorkOrder extends React.Component{
                         <span>1.2公里</span>
                         <span>待审核</span>
                     </li>
+                    <li className={styles['work-item']}>
+                        <span>AABBAABBCCAABBCCCC</span>
+                        <span className={styles['work-licence']}>泸A-123456</span>
+                        <span>1.2公里</span>
+                        <span>待审核</span>
+                    </li>
                 </ul>
             </div>
         </div>
