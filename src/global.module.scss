@@ -1,7 +1,9 @@
 /* 全局变量名称 */
 $primary: #0084FF;
 /* 边框颜色 */
-$borderColor: #e5e5e5;
+$borderColorPrimary: #e5e5e5;
+/* 背景颜色 */
+$backgroundColorPrimary: #f5f5f5;
 
 @mixin line-limit {
     overflow: hidden;
