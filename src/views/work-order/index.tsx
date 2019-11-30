@@ -5,7 +5,7 @@ import styles from './index.module.scss'
 class WorkOrder extends React.Component{
 
     componentDidMount(){
-
+        document.title = '运维工单列表'
     }
 
     componentWillMount(){

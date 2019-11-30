@@ -7,3 +7,12 @@
     height: 100%;
     overflow: auto;
 }
+/* 下列有按钮页面布局 */
+.ignore-container{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #fff;
+    overflow: hidden;
+    padding-bottom: 47px;
+}

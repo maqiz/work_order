@@ -13,7 +13,7 @@ interface IMatchPath{
 
 const menuDataList = [
     {
-        name: '分布',
+        name: '首页',
         iconfont: 'icongerenzhongxin-xuanzhongcopy',
         link: '/',
         subLink: ['/home']

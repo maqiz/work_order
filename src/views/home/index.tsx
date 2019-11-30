@@ -37,6 +37,7 @@ class Home extends React.Component{
     }
 
     componentDidMount(){
+        document.title = '运维首页'
         this.fetchVehicleCluster()
     }
 

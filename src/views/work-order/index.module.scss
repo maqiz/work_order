@@ -4,7 +4,7 @@
     font-size: 36px;
     font-weight: normal;
     padding: 30px 20px;
-    border-bottom: 1px solid $borderColor;
+    border-bottom: 1px solid $borderColorPrimary;
 }
 
 .work-item{
@@ -12,7 +12,7 @@
     display: flex;
     justify-content: space-around;
     padding: 40px 20px;
-    border-bottom: 1px solid $borderColor;
+    border-bottom: 1px solid $borderColorPrimary;
     &>span{
         @include line-limit();
     }

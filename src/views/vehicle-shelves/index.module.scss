@@ -1,0 +1,28 @@
+@import '@/global.module.scss';
+.content{
+    overflow: auto;
+}
+.map{
+    height: 700px;
+}
+.info{
+    padding: 20px;
+    font-size: 34px;
+    :global{
+        .labelList-item-name{
+            width: initial;
+        }
+    }
+}
+.checkbox{
+    :global{
+        .am-list-item{
+            background-color: initial;
+        }
+    }
+}
+.btn{
+    position: absolute !important;
+    bottom: 0;
+    width: 100%;
+}
