@@ -2,6 +2,7 @@ import * as React from 'react'
 import styles from './index.module.scss'
 import { RouteComponentProps } from 'react-router';
 import { throttle } from 'lodash'
+import VehicleApi from '@/api/vehicle'
 
 interface IProps extends RouteComponentProps {
     [prop: string]: any
@@ -16,8 +17,18 @@ class Vehicle extends React.Component<IProps>{
         trailing: false
     })
 
+    fetchVehicleDataList = () => {
+
+        VehicleApi.fetchVehicleDataList({}).then(data => {
+            console.log(data)
+        }).catch( error => {
+            console.log(error)
+        }) 
+    }
+
     componentDidMount(){
         document.title = '下架车辆列表'
+        this.fetchVehicleDataList()
     }
 
     componentWillMount(){
