@@ -41,7 +41,7 @@ class Home extends React.Component{
         this.fetchVehicleCluster()
     }
 
-    componentWillMount(){
+    componentWillUnmount(){
         this.setState = (state, callback) => { return false }
     }
 

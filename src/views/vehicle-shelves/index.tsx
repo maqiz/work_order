@@ -48,7 +48,7 @@ class Vehicle extends React.Component<IProps>{
         document.title = '上架车辆'
     }
 
-    componentWillMount(){
+    componentWillUnmount(){
         this.setState = (state, callback) => { return false }
     }
 

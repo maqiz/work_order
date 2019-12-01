@@ -8,7 +8,7 @@ class WorkOrder extends React.Component{
         document.title = '运维工单列表'
     }
 
-    componentWillMount(){
+    componentWillUnmount(){
         this.setState = (state, callback) => { return false }
     }
 
