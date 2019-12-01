@@ -3,6 +3,7 @@ import styles from './index.module.scss'
 import { RouteComponentProps } from 'react-router';
 import { throttle } from 'lodash'
 import VehicleApi from '@/api/vehicle'
+import Empty from '@/components/Empty'
 
 interface IProps extends RouteComponentProps {
     [prop: string]: any
@@ -105,16 +106,16 @@ class Vehicle extends React.Component<IProps>{
                                         <img src={item.avatar} alt="" />
                                     </div>
                                     <div className={styles['vehicle-info']}>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont icongerenzhongxin-xuanzhongcopy' />{item.name}</p>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont icongerenzhongxin-xuanzhongcopy' />{item.mileage}公里</p>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont icongerenzhongxin-xuanzhongcopy' />{item.count_trip}次行程</p>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont icongerenzhongxin-xuanzhongcopy' />{item.date_reg}</p>
+                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconmingcheng' />{item.name}</p>
+                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconxuhanglicheng' />{item.mileage}公里</p>
+                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconguiji' />{item.count_trip}次行程</p>
+                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconshangchuan' />{item.date_reg}</p>
                                     </div>
                                 </div>
                             })
                         }
                     </div>
-                    : <p>暂无数据</p>
+                    : <Empty />
                     }
                 </div>
                 : null

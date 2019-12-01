@@ -14,25 +14,25 @@ interface IMatchPath{
 const menuDataList = [
     {
         name: '首页',
-        iconfont: 'icongerenzhongxin-xuanzhongcopy',
+        iconfont: 'iconshouye',
         link: '/',
         subLink: ['/home']
     },
     {
         name: '工单',
-        iconfont: 'iconcheliang',
+        iconfont: 'icongongdan',
         link: '/workOrder',
         subLink: ['/workOrder/list']
     },
     {
         name: '车辆',
-        iconfont: 'icongerenzhongxin-xuanzhongcopy',
+        iconfont: 'iconcheliang',
         link: '/vehicle',
         subLink: ['/vehicle/list']
     },
     {
         name: '我',
-        iconfont: 'icongerenzhongxin-xuanzhongcopy',
+        iconfont: 'iconuser',
         link: '/center',
         subLink: ['/center']
     }

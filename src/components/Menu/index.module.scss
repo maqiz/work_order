@@ -18,6 +18,11 @@
     &.active{
         color: $primary;
     }
+    :global{
+        .iconfont{
+            font-size: 34px;
+        }
+    }
 }
 .menu-item-title{
     margin-top: 10px;

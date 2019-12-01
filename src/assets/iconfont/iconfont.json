@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "167188",
+      "name": "上传",
+      "font_class": "shangchuan",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "376345",
+      "name": "个人中心",
+      "font_class": "user",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "1435243",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "1802959",
+      "name": "empty",
+      "font_class": "empty",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "5321789",
+      "name": "轨迹1",
+      "font_class": "guiji",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
       "icon_id": "5881137",
       "name": "车辆",
       "font_class": "cheliang",
@@ -20,11 +55,25 @@
       "unicode_decimal": 58945
     },
     {
-      "icon_id": "11837025",
-      "name": "个人中心 - 未选中",
-      "font_class": "gerenzhongxin-xuanzhongcopy",
-      "unicode": "e607",
-      "unicode_decimal": 58887
+      "icon_id": "7001849",
+      "name": "工单",
+      "font_class": "gongdan",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "7521550",
+      "name": "名称",
+      "font_class": "mingcheng",
+      "unicode": "e758",
+      "unicode_decimal": 59224
+    },
+    {
+      "icon_id": "11536342",
+      "name": "续航里程",
+      "font_class": "xuhanglicheng",
+      "unicode": "e798",
+      "unicode_decimal": 59288
     }
   ]
 }

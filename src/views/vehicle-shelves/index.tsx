@@ -2,7 +2,9 @@ import * as React from 'react'
 import Amap from '@/components/Map'
 import LabelList from '@/components/labelList'
 import { RouteComponentProps } from 'react-router-dom'
-import { Checkbox, Button } from 'antd-mobile'
+import { Checkbox, Toast } from 'antd-mobile'
+import FooterBottom from '@/components/FooterButton'
+import { throttle } from 'lodash'
 import styles from './index.module.scss'
 
 const CheckboxItem = Checkbox.CheckboxItem;
@@ -30,22 +32,49 @@ class Vehicle extends React.Component<IProps>{
             }
         ],
         checkDataList: [
-            { value: 0, label: 'Ph.D.' },
-            { value: 1, label: 'Bachelor' },
-            { value: 2, label: 'College diploma' },
-            { value: 3, label: 'College diploma' },
-            { value: 4, label: 'College diploma' },
+            { value: 0, label: '车辆完成充电,续航里程满足运营要求', checked: false },
+            { value: 1, label: '已清理车内异物喝垃圾', checked: false },
+            { value: 2, label: '车辆移动到指定投放地点', checked: false },
         ],
         checkSelectKeys: []
     }
 
     /* check变化函数 */
-    onChange = (value: number) => {
-        const { checkSelectKeys } = this.state
+    onChange = (index: number) => {
+        const { checkDataList } = this.state
+        checkDataList[index].checked = !checkDataList[index].checked
+        this.setState({
+            checkDataList: [...checkDataList]
+        })
     }
+
+    /* 处理按钮点击 */
+    handleClick = throttle(() => {
+        try {
+            const { checkDataList } = this.state
+            const checkTitleArr = checkDataList.reduce( (prev: any[], cur: any) => {
+                if( cur.checked === true ){
+                    prev.push(cur.label)
+                }
+                return prev
+            }, [])
+            
+            if( Array.isArray(checkTitleArr) && checkTitleArr.length>0 ) {
+                
+            } else {
+                Toast.info('请至少选择一项')
+            }
+
+        } catch (error) {
+            
+        }
+    }, 500, {
+        trailing: false
+    })
 
     componentDidMount(){
         document.title = '上架车辆'
+        console.log(this.props)
     }
 
     componentWillUnmount(){
@@ -59,18 +88,18 @@ class Vehicle extends React.Component<IProps>{
                 <div className={styles['map']}>
                     <Amap />
                 </div>
-                <LabelList className={styles['info']} labelDataList={labelDataList} />
+                <LabelList className={styles['info']} data={labelDataList} />
                 <div className={styles['checkbox']}>
                     {
-                        checkDataList.map( item => {
-                            return <CheckboxItem key={item.value} onChange={() => this.onChange(item.value)}>
+                        checkDataList.map( (item, index) => {
+                            return <CheckboxItem key={item.value} onChange={() => this.onChange(index)} checked={item.checked}>
                             {item.label}
                         </CheckboxItem>
                         } )
                     }
                 </div>
             </div>
-            <Button className={styles['btn']} type="primary">上架车辆</Button>
+            <FooterBottom handleClick={this.handleClick} className={styles['btn']} type="primary">上架车辆</FooterBottom>
         </div>
     }
 }
