@@ -7,7 +7,7 @@ import Empty from '@/components/Empty'
 
 interface IProps extends RouteComponentProps {
     [prop: string]: any
-  }
+}
 
 class Vehicle extends React.Component<IProps>{
 

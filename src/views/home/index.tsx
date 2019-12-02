@@ -1,10 +1,33 @@
 import * as React from 'react'
 import Amap from '@/components/Map'
+import { RouteComponentProps } from 'react-router';
 import styles from './index.module.scss'
 import HomeApi from '@/api/home'
+import { throttle } from 'lodash'
 
 
-class Home extends React.Component{
+interface IProps extends RouteComponentProps {
+    [prop: string]: any
+}
+interface IMapEvent{
+    created: (map: any) => void;
+}
+
+class Home extends React.Component<IProps>{
+    amapEvents: IMapEvent;
+    map: any
+
+    constructor(props: any){
+        super(props);
+        // 地图事件
+        this.amapEvents = {
+            created: (map: any) => {
+                this.map = map
+                this.mapMoveend()
+                map.on('moveend', this.mapMoveend);
+            }
+        }
+    }
 
     state = {
         infoData: [
@@ -23,10 +46,23 @@ class Home extends React.Component{
         ]
     }
 
-    fetchVehicleCluster = () => {
+    mapMoveend = throttle(() => {
+        try {
+            const bs = this.map.getBounds();   //获取可视区域
+            const {southwest, northeast} = bs; //southwest-可视区域左下角,northeast-可视区域右上角
+            const rectangle = southwest.lng + ',' + northeast.lat +',' + northeast.lng + "," + southwest.lat;	//左上 + 右下坐标
+            this.fetchVehicleCluster(rectangle)
+        } catch (error) {
+            console.log(error)
+        }
+    }, 500, {
+        trailing: false
+    })
+
+    fetchVehicleCluster = (rectangle: string) => {
         
         const params = {
-            rectangle: '118.796424,32.085187,118.77488,32.00596',
+            rectangle
         }
 
         HomeApi.fetchVehicleCluster({params}).then(data => {
@@ -38,7 +74,6 @@ class Home extends React.Component{
 
     componentDidMount(){
         document.title = '运维首页'
-        this.fetchVehicleCluster()
     }
 
     componentWillUnmount(){
@@ -67,7 +102,7 @@ class Home extends React.Component{
                 </ul>
             </div>
             <div className={styles['map']}>
-                <Amap />
+                <Amap events={this.amapEvents} />
             </div>
         </div>
     }
