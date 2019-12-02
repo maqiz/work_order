@@ -46,19 +46,7 @@ class Home extends React.Component<IProps>{
         ]
     }
 
-    mapMoveend = throttle(() => {
-        try {
-            const bs = this.map.getBounds();   //获取可视区域
-            const {southwest, northeast} = bs; //southwest-可视区域左下角,northeast-可视区域右上角
-            const rectangle = southwest.lng + ',' + northeast.lat +',' + northeast.lng + "," + southwest.lat;	//左上 + 右下坐标
-            this.fetchVehicleCluster(rectangle)
-        } catch (error) {
-            console.log(error)
-        }
-    }, 500, {
-        trailing: false
-    })
-
+    /* 根据地图可视化区域获取车辆列表 */
     fetchVehicleCluster = (rectangle: string) => {
         
         const params = {
@@ -72,8 +60,48 @@ class Home extends React.Component<IProps>{
         }) 
     }
 
+    /* 获取车辆概况 */
+    fetchVehicleSummary = () => {
+        
+        const params = {}
+
+        HomeApi.fetchVehicleSummary({params}).then(data => {
+            console.log(data)
+        }).catch( error => {
+            console.log(error)
+        }) 
+    }
+
+    /* 获取工单概况 */
+    fetchWorkOrderSummary = () => {
+        
+        const params = {}
+
+        HomeApi.fetchWorkOrderSummary({params}).then(data => {
+            console.log(data)
+        }).catch( error => {
+            console.log(error)
+        }) 
+    }
+
+    /* 处理地图移动事件结束 */
+    mapMoveend = throttle(() => {
+        try {
+            const bs = this.map.getBounds();   //获取可视区域
+            const {southwest, northeast} = bs; //southwest-可视区域左下角,northeast-可视区域右上角
+            const rectangle = southwest.lng + ',' + northeast.lat +',' + northeast.lng + "," + southwest.lat;	//左上 + 右下坐标
+            this.fetchVehicleCluster(rectangle)
+        } catch (error) {
+            console.log(error)
+        }
+    }, 500, {
+        trailing: false
+    })
+
     componentDidMount(){
         document.title = '运维首页'
+        this.fetchVehicleSummary()
+        this.fetchWorkOrderSummary()
     }
 
     componentWillUnmount(){
