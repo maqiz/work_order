@@ -94,33 +94,28 @@ class Vehicle extends React.Component<IProps>{
 
     render() {
         const { vehicleDataList, isLoading } = this.state
-        return <React.Fragment>
+        return <div ref={ref => this.vehicle = ref} className={styles['container']}>
             {
-                isLoading === false ? <div ref={ref => this.vehicle = ref} className={styles['container']}>
+                isLoading === false ? (Array.isArray(vehicleDataList) && vehicleDataList.length > 0 ? <div ref={ref => this.vehicleWrap = ref} className={styles['vehicle-list']}>
                     {
-                        Array.isArray(vehicleDataList) && vehicleDataList.length > 0 ? <div ref={ref => this.vehicleWrap = ref} className={styles['vehicle-list']}>
-                        {
-                            vehicleDataList.map((item: any, index: number) => {
-                                return <div key={item.unid || index} onClick={this.handleToVhicleShelves} className={styles['vehicle-item']}>
-                                    <div className={styles['vehicle-img']}>
-                                        <img src={item.avatar} alt="" />
-                                    </div>
-                                    <div className={styles['vehicle-info']}>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconmingcheng' />{item.name}</p>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconxuhanglicheng' />{item.mileage}公里</p>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconguiji' />{item.count_trip}次行程</p>
-                                        <p className={styles['vehicle-info-item']}><i className='iconfont iconshangchuan' />{item.date_reg}</p>
-                                    </div>
+                        vehicleDataList.map((item: any, index: number) => {
+                            return <div key={item.unid || index} onClick={this.handleToVhicleShelves} className={styles['vehicle-item']}>
+                                <div className={styles['vehicle-img']}>
+                                    <img src={item.avatar} alt="" />
                                 </div>
-                            })
-                        }
-                    </div>
-                    : <Empty />
+                                <div className={styles['vehicle-info']}>
+                                    <p className={styles['vehicle-info-item']}><i className='iconfont iconmingcheng' />{item.name}</p>
+                                    <p className={styles['vehicle-info-item']}><i className='iconfont iconxuhanglicheng' />{item.mileage}公里</p>
+                                    <p className={styles['vehicle-info-item']}><i className='iconfont iconguiji' />{item.count_trip}次行程</p>
+                                    <p className={styles['vehicle-info-item']}><i className='iconfont iconshangchuan' />{item.date_reg}</p>
+                                </div>
+                            </div>
+                        })
                     }
                 </div>
-                : null
+                    : <Empty />) : null
             }
-        </React.Fragment>
+        </div>
     }
 }
 
