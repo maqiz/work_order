@@ -26,13 +26,14 @@ class Vehicle extends React.Component<IProps>{
         isMore: true
     }
 
-    handleToVhicleShelves = throttle(() => {
+    handleToVhicleShelves = throttle((unid: string) => {
         const { history } = this.props
-        history.push(`/vehicleShelves`);
+        history.push(`/vehicleShelves?vehicleUnid=${unid}`);
     }, 500, {
         trailing: false
     })
-
+    
+    /* 获取车辆数据列表 */
     fetchVehicleDataList = () => {
         const { vehicleDataList, offset, page_size } = this.state
         const params = {
@@ -99,7 +100,7 @@ class Vehicle extends React.Component<IProps>{
                 isLoading === false ? (Array.isArray(vehicleDataList) && vehicleDataList.length > 0 ? <div ref={ref => this.vehicleWrap = ref} className={styles['vehicle-list']}>
                     {
                         vehicleDataList.map((item: any, index: number) => {
-                            return <div key={item.unid || index} onClick={this.handleToVhicleShelves} className={styles['vehicle-item']}>
+                            return <div key={item.unid || index} onClick={() => this.handleToVhicleShelves(item.unid)} className={styles['vehicle-item']}>
                                 <div className={styles['vehicle-img']}>
                                     <img src={item.avatar} alt="" />
                                 </div>

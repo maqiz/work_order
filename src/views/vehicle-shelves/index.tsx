@@ -5,9 +5,12 @@ import { RouteComponentProps } from 'react-router-dom'
 import { Checkbox, Toast } from 'antd-mobile'
 import FooterBottom from '@/components/FooterButton'
 import { throttle } from 'lodash'
+import { fetchUrlParams } from '@/utils/urlTools'
+import VehicleApi from '@/api/vehicle'
 import styles from './index.module.scss'
 
 const CheckboxItem = Checkbox.CheckboxItem;
+
 
 interface IProps extends RouteComponentProps{
     [prop: string]: any
@@ -17,18 +20,23 @@ interface IProps extends RouteComponentProps{
 class Vehicle extends React.Component<IProps>{
 
     state = {
+        vehicleUnid: '',
         labelDataList: [
             {
                 name: '车辆信息',
-                desc: '泸A-D12345'
+                desc: '--'
             },
             {
-                name: '车辆信息',
-                desc: '泸A-D12345'
+                name: '车辆位置',
+                desc: '--'
             },
             {
-                name: '车辆信息',
-                desc: '泸A-D12345'
+                name: '续航信息',
+                desc: '--'
+            },
+            {
+                name: '数据时间',
+                desc: '--'
             }
         ],
         checkDataList: [
@@ -36,7 +44,43 @@ class Vehicle extends React.Component<IProps>{
             { value: 1, label: '已清理车内异物喝垃圾', checked: false },
             { value: 2, label: '车辆移动到指定投放地点', checked: false },
         ],
-        checkSelectKeys: []
+    }
+
+    fetchVehicleInfoData = (vehicleUnid: string) => {
+        const { labelDataList } = this.state
+        VehicleApi.fetchVehicleInfoData({}, `/vehicle_mtng/${vehicleUnid}`).then( data => {
+            const { licence, addr, endurance, datime_last }: any = data
+            labelDataList[0] = {...labelDataList[0], desc: licence}
+            labelDataList[1] = {...labelDataList[1], desc: addr}
+            labelDataList[2] = {...labelDataList[2], desc: `${endurance}公里`}
+            labelDataList[3] = {...labelDataList[3], desc: datime_last}
+            this.setState({
+                labelDataList
+            })
+            console.log(data)
+        }).catch( error => {
+            console.log(error)
+        })
+
+    }
+
+    /* 上架车辆 */
+    submitShelvesVehicle = (comment: string) => {
+        const { history } = this.props
+        const { vehicleUnid } = this.state
+
+        const params = {
+            comment
+        }
+        
+        VehicleApi.submitShelvesVehicle(params, `/vehicle_mtng/${vehicleUnid}/ava`).then( data => {
+            Toast.success('上架成功')
+            setTimeout(history.goBack, 500)
+        }).catch( error => {
+            console.log(error)
+        })
+
+
     }
 
     /* check变化函数 */
@@ -52,7 +96,7 @@ class Vehicle extends React.Component<IProps>{
     handleClick = throttle(() => {
         try {
             const { checkDataList } = this.state
-            const checkTitleArr = checkDataList.reduce( (prev: any[], cur: any) => {
+            const checkTitleArr: string[] = checkDataList.reduce( (prev: any[], cur: any) => {
                 if( cur.checked === true ){
                     prev.push(cur.label)
                 }
@@ -60,7 +104,7 @@ class Vehicle extends React.Component<IProps>{
             }, [])
             
             if( Array.isArray(checkTitleArr) && checkTitleArr.length>0 ) {
-                
+                this.submitShelvesVehicle(checkTitleArr.join(','))
             } else {
                 Toast.info('请至少选择一项')
             }
@@ -74,7 +118,15 @@ class Vehicle extends React.Component<IProps>{
 
     componentDidMount(){
         document.title = '上架车辆'
-        console.log(this.props)
+        const { location } = this.props
+        const urlObj = fetchUrlParams(location.search)
+        const { vehicleUnid } = urlObj
+        if( vehicleUnid ) {
+            this.fetchVehicleInfoData(vehicleUnid)
+            this.setState({
+                vehicleUnid: urlObj.vehicleUnid
+            })
+        }
     }
 
     componentWillUnmount(){

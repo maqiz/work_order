@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Amap from '@/components/Map'
+import { Markers } from 'react-amap'
 import { RouteComponentProps } from 'react-router';
 import styles from './index.module.scss'
 import HomeApi from '@/api/home'
@@ -30,31 +31,47 @@ class Home extends React.Component<IProps>{
     }
 
     state = {
+        vehicleTotalCount: 0,
         infoData: [
             {
                 name: '上架',
-                value: '78'
+                value: '0'
             },
             {
                 name: '待维护',
-                value: '256'
+                value: '0'
             },
             {
                 name: '工单',
-                value: '50'
+                value: '0'
             }
-        ]
+        ],
+        markers: []
     }
 
     /* 根据地图可视化区域获取车辆列表 */
     fetchVehicleCluster = (rectangle: string) => {
         
         const params = {
-            rectangle
+            geodetic_system: 'gcj02',
+            rectangle: '121.44639460872365,31.028372473333746,121.4497524800122,31.023732377950054'
         }
 
-        HomeApi.fetchVehicleCluster({params}).then(data => {
-            console.log(data)
+        HomeApi.fetchVehicleCluster({params}, '/vehicle_mtng/cluster/4856712C981340B0A6A10B77861F2411').then((data: any) => {
+            const markers = data.map( (item: any) => {
+                const data = item.vehicles.vehicle[0]
+                return {
+                    position: {
+                        longitude: data.lond,
+                        latitude: data.latd
+                    },
+                    image: data.avatar,
+                    data: data
+                }
+            })
+            this.setState({
+                markers
+            })
         }).catch( error => {
             console.log(error)
         }) 
@@ -62,11 +79,15 @@ class Home extends React.Component<IProps>{
 
     /* 获取车辆概况 */
     fetchVehicleSummary = () => {
-        
-        const params = {}
-
-        HomeApi.fetchVehicleSummary({params}).then(data => {
-            console.log(data)
+        const { infoData } = this.state
+        HomeApi.fetchVehicleSummary().then(data => {
+            const { count_total, count_ava, count_mtng }: any = data
+            infoData[0] = {...infoData[0], value: count_ava}
+            infoData[1] = {...infoData[1], value: count_mtng}
+            this.setState({
+                vehicleTotalCount: count_total,
+                infoData: infoData
+            })
         }).catch( error => {
             console.log(error)
         }) 
@@ -74,11 +95,13 @@ class Home extends React.Component<IProps>{
 
     /* 获取工单概况 */
     fetchWorkOrderSummary = () => {
-        
-        const params = {}
-
-        HomeApi.fetchWorkOrderSummary({params}).then(data => {
-            console.log(data)
+        const { infoData } = this.state
+        HomeApi.fetchWorkOrderSummary().then(data => {
+            const { count_total}: any = data
+            infoData[2] = {...infoData[2], value: count_total}
+            this.setState({
+                infoData: infoData
+            })
         }).catch( error => {
             console.log(error)
         }) 
@@ -98,6 +121,12 @@ class Home extends React.Component<IProps>{
         trailing: false
     })
 
+    /* 地图渲染maker函数 */
+    renderMarkerFn = (extData: any )=> {
+        console.log(extData)
+        return <img style={{ width: '64px', cursor: 'pointer' }} src={extData.image} alt=''/>
+    }
+  
     componentDidMount(){
         document.title = '运维首页'
         this.fetchVehicleSummary()
@@ -110,12 +139,12 @@ class Home extends React.Component<IProps>{
 
     render(){
         
-        const { infoData } = this.state
+        const { infoData, vehicleTotalCount, markers } = this.state
 
         return <div className={styles['container']}>
             <div className={styles['info']}>
                 <div className={styles['info-head']}>
-                    <div className={styles['info-number']}>165</div>
+                    <div className={styles['info-number']}>{vehicleTotalCount}</div>
                     <div className={styles['info-nane']}>车辆总数</div>
                 </div>
                 <ul className={styles['info-list']}>
@@ -130,7 +159,12 @@ class Home extends React.Component<IProps>{
                 </ul>
             </div>
             <div className={styles['map']}>
-                <Amap events={this.amapEvents} />
+                <Amap events={this.amapEvents}>
+                    <Markers
+                        render={this.renderMarkerFn}
+                        markers={markers}
+                    />
+                </Amap>
             </div>
         </div>
     }

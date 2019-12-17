@@ -9,5 +9,5 @@ export default {
     fetchWorkOrderSummary: (params: any = {}) => Axios.get('/work_order/summary', params),
 
     /* 根据地图可视化区域获取车辆列表 */
-    fetchVehicleCluster: (params: any = {}) => Axios.get('/vehicle_mtng/cluster', params)
+    fetchVehicleCluster: (params: any = {}, url: string) => Axios.get(url, params),
 }

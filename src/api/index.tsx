@@ -48,7 +48,7 @@ Axios.interceptors.request.use( (config: AxiosRequestConfig) => {
     if (Cache.getItem('access_token')) {
         config.headers.Authorization = `Bearer ${Cache.getItem('access_token')}`;
     }
-    if (method === 'post') { // 针对post的处理
+    if (method === 'post' || method === 'put') { // 针对post的处理
         config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     }
     return config;
@@ -61,7 +61,7 @@ Axios.interceptors.request.use( (config: AxiosRequestConfig) => {
 Axios.interceptors.response.use( (response: AxiosResponse) => {
     // 对响应数据做点什么
     if( response.status === 404) {
-        return null
+        return Promise.reject(response);
     }
     return response.data;
 }, (error: AxiosError) => {

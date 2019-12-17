@@ -23,9 +23,12 @@ class Amap extends React.Component<IProp>{
 
         return <div style={{ width: '100%', height: '100%' }}>
             <Map
+                plugins={['ToolBar']}
                 {...this.props}
                 loading={loading}
-            />
+            >
+                { this.props.children }
+            </Map>
         </div>
     }
 }
