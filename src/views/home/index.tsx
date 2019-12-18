@@ -17,6 +17,7 @@ interface IMapEvent{
 class Home extends React.Component<IProps>{
     amapEvents: IMapEvent;
     map: any
+    vehicleEl!: HTMLDivElement;
 
     constructor(props: any){
         super(props);
@@ -24,13 +25,14 @@ class Home extends React.Component<IProps>{
         this.amapEvents = {
             created: (map: any) => {
                 this.map = map
-                this.mapMoveend()
-                map.on('moveend', this.mapMoveend);
+                this.mapMoveEnd()
+                map.on('moveend', this.mapMoveEnd);
             }
         }
     }
 
     state = {
+        isShowVehicle: true,
         vehicleTotalCount: 0,
         infoData: [
             {
@@ -108,7 +110,7 @@ class Home extends React.Component<IProps>{
     }
 
     /* 处理地图移动事件结束 */
-    mapMoveend = throttle(() => {
+    mapMoveEnd = throttle(() => {
         try {
             const bs = this.map.getBounds();   //获取可视区域
             const {southwest, northeast} = bs; //southwest-可视区域左下角,northeast-可视区域右上角
@@ -126,11 +128,44 @@ class Home extends React.Component<IProps>{
         console.log(extData)
         return <img style={{ width: '64px', cursor: 'pointer' }} src={extData.image} alt=''/>
     }
+
+    eventInit = () => {
+        try {
+            const vehicleEl = this.vehicleEl
+            let startX: number=0, startY: number=0, isMoveEnd: boolean = true;
+            vehicleEl.addEventListener('touchstart', (e) => {
+                const touches = e.touches;
+                startX = touches[0].pageX;
+                startY = touches[0].pageY;
+                isMoveEnd = false;
+            })
+
+            vehicleEl.addEventListener('touchend', (e) => {
+                if( isMoveEnd === false) {
+                    isMoveEnd = true
+                    const touches = e.changedTouches;
+                    const endX = touches[0].pageX;
+                    const endY = touches[0].pageY;
+                    console.log(endX - startX, endY - startY)
+                    if( endY - startY > 0 ) {
+                        console.log('向下滑动了')
+                        this.setState({
+                            isShowVehicle: false
+                        })
+                    }
+                }
+            })
+
+        } catch (error) {
+            
+        }
+    }
   
     componentDidMount(){
         document.title = '运维首页'
         this.fetchVehicleSummary()
         this.fetchWorkOrderSummary()
+        this.eventInit()
     }
 
     componentWillUnmount(){
@@ -139,7 +174,7 @@ class Home extends React.Component<IProps>{
 
     render(){
         
-        const { infoData, vehicleTotalCount, markers } = this.state
+        const { infoData, vehicleTotalCount, markers, isShowVehicle } = this.state
 
         return <div className={styles['container']}>
             <div className={styles['info']}>
@@ -165,6 +200,19 @@ class Home extends React.Component<IProps>{
                         markers={markers}
                     />
                 </Amap>
+            </div>
+
+            <div ref={(ref: HTMLDivElement) => {this.vehicleEl = ref}} className={ isShowVehicle ? styles['vehicle'] : `${styles['vehicle']} ${styles['hide']}`}>
+                <div className={styles['vehicle-img']}>
+                    <img src="" alt=""/>
+                </div>
+                <h2 className={styles['vehicle-title']}>自动互联纸</h2>
+                <div className={styles['vehicle-info-list']}>
+                    <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
+                    <div className={styles['vehicle-info-item']}>座位：<span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
+                    <div className={styles['vehicle-info-item']}>续航里程: <span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
+                    <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
+                </div>
             </div>
         </div>
     }
