@@ -5,19 +5,25 @@ import { RouteComponentProps } from 'react-router';
 import styles from './index.module.scss'
 import HomeApi from '@/api/home'
 import { throttle } from 'lodash'
+import Item from 'antd-mobile/lib/popover/Item';
 
 
 interface IProps extends RouteComponentProps {
+    [prop: string]: any,
+}
+
+interface IState {
     [prop: string]: any
 }
 interface IMapEvent{
     created: (map: any) => void;
 }
 
-class Home extends React.Component<IProps>{
+class Home extends React.Component<IProps, IState>{
     amapEvents: IMapEvent;
     map: any
     vehicleEl!: HTMLDivElement;
+    markersEvents: { click: (MapsOption: any, marker: any) => void; };
 
     constructor(props: any){
         super(props);
@@ -29,10 +35,20 @@ class Home extends React.Component<IProps>{
                 map.on('moveend', this.mapMoveEnd);
             }
         }
+        //
+        this.markersEvents = {
+            click: (MapsOption, marker) => {
+                const data = marker.getExtData()
+                this.setState({
+                    isShowVehicle: true,
+                    vehicleInfoData: data.data
+                })
+            }
+        }
     }
 
-    state = {
-        isShowVehicle: true,
+    public readonly state: Readonly<IState> = {
+        isShowVehicle: false,
         vehicleTotalCount: 0,
         infoData: [
             {
@@ -48,7 +64,8 @@ class Home extends React.Component<IProps>{
                 value: '0'
             }
         ],
-        markers: []
+        markers: [],
+        vehicleInfoData: null
     }
 
     /* 根据地图可视化区域获取车辆列表 */
@@ -56,7 +73,8 @@ class Home extends React.Component<IProps>{
         
         const params = {
             geodetic_system: 'gcj02',
-            rectangle: '121.44639460872365,31.028372473333746,121.4497524800122,31.023732377950054'
+            rectangle
+            // rectangle: '121.44639460872365,31.028372473333746,121.4497524800122,31.023732377950054'
         }
 
         HomeApi.fetchVehicleCluster({params}, '/vehicle_mtng/cluster/4856712C981340B0A6A10B77861F2411').then((data: any) => {
@@ -174,7 +192,7 @@ class Home extends React.Component<IProps>{
 
     render(){
         
-        const { infoData, vehicleTotalCount, markers, isShowVehicle } = this.state
+        const { infoData, vehicleTotalCount, markers, isShowVehicle, vehicleInfoData } = this.state
 
         return <div className={styles['container']}>
             <div className={styles['info']}>
@@ -184,7 +202,7 @@ class Home extends React.Component<IProps>{
                 </div>
                 <ul className={styles['info-list']}>
                     {
-                        infoData.map( (item, index)  => {
+                        infoData.map( (item: any, index: number)  => {
                             return <li key={index} className={styles['info-item']}>
                             <div className={styles['info-number']}>{item.value}</div>
                             <div className={styles['info-nane']}>{item.name}</div>
@@ -197,22 +215,27 @@ class Home extends React.Component<IProps>{
                 <Amap events={this.amapEvents}>
                     <Markers
                         render={this.renderMarkerFn}
+                        events={this.markersEvents}
                         markers={markers}
                     />
                 </Amap>
             </div>
 
             <div ref={(ref: HTMLDivElement) => {this.vehicleEl = ref}} className={ isShowVehicle ? styles['vehicle'] : `${styles['vehicle']} ${styles['hide']}`}>
-                <div className={styles['vehicle-img']}>
-                    <img src="" alt=""/>
-                </div>
-                <h2 className={styles['vehicle-title']}>自动互联纸</h2>
-                <div className={styles['vehicle-info-list']}>
-                    <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
-                    <div className={styles['vehicle-info-item']}>座位：<span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
-                    <div className={styles['vehicle-info-item']}>续航里程: <span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
-                    <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>粤B-P12R7</span></div>
-                </div>
+                {
+                    vehicleInfoData && <React.Fragment>
+                        <div className={styles['vehicle-img']}>
+                            <img src={vehicleInfoData.avatar} alt=""/>
+                        </div>
+                        <h2 className={styles['vehicle-title']}>{vehicleInfoData.name}</h2>
+                        <div className={styles['vehicle-info-list']}>
+                            <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.licence}</span></div>
+                            <div className={styles['vehicle-info-item']}>座位：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.seats}座</span></div>
+                            <div className={styles['vehicle-info-item']}>续航里程: <span className={styles['vehicle-info-item-name']}>{vehicleInfoData.endurance}公里</span></div>
+                            <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.distance}米</span></div>
+                        </div>
+                    </React.Fragment>
+                }
             </div>
         </div>
     }
