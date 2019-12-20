@@ -48,7 +48,7 @@ class Home extends React.Component<IProps, IState>{
     }
 
     public readonly state: Readonly<IState> = {
-        isShowVehicle: false,
+        isShowVehicle: true,
         vehicleTotalCount: 0,
         infoData: [
             {
@@ -223,16 +223,20 @@ class Home extends React.Component<IProps, IState>{
 
             <div ref={(ref: HTMLDivElement) => {this.vehicleEl = ref}} className={ isShowVehicle ? styles['vehicle'] : `${styles['vehicle']} ${styles['hide']}`}>
                 {
-                    vehicleInfoData && <React.Fragment>
+                    <React.Fragment>
                         <div className={styles['vehicle-img']}>
-                            <img src={vehicleInfoData.avatar} alt=""/>
+                            {/* <img src={vehicleInfoData.avatar} alt=""/> */}
                         </div>
-                        <h2 className={styles['vehicle-title']}>{vehicleInfoData.name}</h2>
+                        {/* <h2 className={styles['vehicle-title']}>{vehicleInfoData.name}</h2> */}
                         <div className={styles['vehicle-info-list']}>
-                            <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.licence}</span></div>
+                            {/* <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.licence}</span></div>
                             <div className={styles['vehicle-info-item']}>座位：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.seats}座</span></div>
                             <div className={styles['vehicle-info-item']}>续航里程: <span className={styles['vehicle-info-item-name']}>{vehicleInfoData.endurance}公里</span></div>
-                            <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.distance}米</span></div>
+                            <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.distance}米</span></div> */}
+                        </div>
+                        <div className={styles['vehicle-bottom']}>
+                            <div className={styles['vehicle-billing']}><i className='iconfont iconchangyongtubiao_jifei'/>6元/小时+0.6/公里</div>
+                            <div className={styles['vehicle-address']}><i className='iconfont iconaddress'/>这是地址在哪</div>
                         </div>
                     </React.Fragment>
                 }

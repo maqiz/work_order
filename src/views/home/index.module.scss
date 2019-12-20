@@ -85,7 +85,7 @@
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid $borderColorPrimary;
 }
 .vehicle-info-item{
     width: 50%;
@@ -95,4 +95,17 @@
 }
 .vehicle-info-item-name{
     color: initial;
+}
+.vehicle-bottom{
+    border-top: 1px solid $borderColorPrimary;
+}
+.vehicle-billing,.vehicle-address{
+    padding: 20px 0;
+    @include line-limit();
+    :global{
+        .iconfont{
+            margin-right: 10px;
+            color: $primary;
+        }
+    }
 }

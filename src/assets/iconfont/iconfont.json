@@ -41,18 +41,18 @@
       "unicode_decimal": 58978
     },
     {
+      "icon_id": "5821110",
+      "name": "address",
+      "font_class": "address",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
       "icon_id": "5881137",
       "name": "车辆",
       "font_class": "cheliang",
       "unicode": "e629",
       "unicode_decimal": 58921
-    },
-    {
-      "icon_id": "6507456",
-      "name": "首页",
-      "font_class": "shouye-copy",
-      "unicode": "e641",
-      "unicode_decimal": 58945
     },
     {
       "icon_id": "7001849",
@@ -67,6 +67,13 @@
       "font_class": "mingcheng",
       "unicode": "e758",
       "unicode_decimal": 59224
+    },
+    {
+      "icon_id": "10283812",
+      "name": "计费",
+      "font_class": "changyongtubiao_jifei",
+      "unicode": "e608",
+      "unicode_decimal": 58888
     },
     {
       "icon_id": "11536342",
