@@ -3,7 +3,7 @@ import Amap from '@/components/Map'
 import LabelList from '@/components/labelList'
 import { RouteComponentProps } from 'react-router-dom'
 import { Marker } from 'react-amap'
-import { Toast, Button } from 'antd-mobile'
+import { Toast } from 'antd-mobile'
 import FooterBottom from '@/components/FooterButton'
 import { throttle } from 'lodash'
 import { fetchUrlParams } from '@/utils/urlTools'
@@ -17,13 +17,8 @@ interface IProps extends RouteComponentProps{
     [prop: string]: any
 }
 
-interface IParams {
-    unid: string,
-    comment?: string
-}
 
-
-class HandleWorkOrder extends React.Component<IProps>{
+class ReceiveWorkOrder extends React.Component<IProps>{
     amapEvents: { created: (map: any) => void; }
     map: any
 
@@ -40,7 +35,6 @@ class HandleWorkOrder extends React.Component<IProps>{
     state = {
         workOrderUnid: '',
         vehicleUnid: '',
-        comment: '',
         labelDataList: [
             {
                 name: '车辆信息',
@@ -96,27 +90,15 @@ class HandleWorkOrder extends React.Component<IProps>{
 
     } 
     /* 处理按钮点击 */
-    handleClick = throttle((type: string) => {
+    handleClick = throttle(() => {
         const { history } = this.props
-        const { workOrderUnid, comment } = this.state
+        const { workOrderUnid } = this.state
         try {
-            const params: IParams = {
-                unid: workOrderUnid,
+            const params = {
+                unid: workOrderUnid
             }
-            if( type === 'done' ) {
-                if( !check.notEmpty(comment) ) {
-                    Toast.info('请输入备注内容')
-                    return false
-                } else {
-                    params.comment = comment
-                }
-            }
-            WorkOrderApi.receiveWorkOrder(params, `/work_order/${workOrderUnid}/${type}`).then( data => {
-                if( type === 'done' ) {
-                    Toast.success('工单任务处理成功')
-                } else {
-                    Toast.success('工单任务取消成功')
-                }
+            WorkOrderApi.receiveWorkOrder(params, `/work_order/${workOrderUnid}/apply`).then( data => {
+                Toast.success('工单任务领取成功')
                 setTimeout(history.goBack, 500)
             }).catch( error => {
                 console.log(error)
@@ -135,12 +117,6 @@ class HandleWorkOrder extends React.Component<IProps>{
             return <img style={{ width: '64px'}} src={avatar} alt=''/> 
         }
         return null
-    }
-    /* 处理输入框变化 */
-    handleChange = (e: any, type: string) => {
-        this.setState({
-            [type]: e.target.value
-        })
     }
 
     componentDidMount(){
@@ -166,7 +142,7 @@ class HandleWorkOrder extends React.Component<IProps>{
     }
 
     render(){
-        const { labelDataList, markerPosition, markerExtData, comment } = this.state
+        const { labelDataList, markerPosition, markerExtData } = this.state
         console.log(markerPosition)
         return <div className={`ignore-container`}>
             <div className={styles['content']}>
@@ -179,16 +155,9 @@ class HandleWorkOrder extends React.Component<IProps>{
                 </div>
                 <LabelList className={styles['info']} data={labelDataList} />
             </div>
-            <div className={styles['textarea-wrap']}>
-                <textarea onChange={ (e) => {this.handleChange(e, 'comment')} } value={comment} placeholder={'请输入处理工单备注'} className={styles['textarea']} rows={5}></textarea>
-            </div>
-
-            <div className={styles['btn']}>
-                <Button onClick={ () => this.handleClick('cancel')} className={styles['btn-cancel']}>取消任务</Button>
-                <Button onClick={ () => this.handleClick('done')} type='primary'>完成</Button>
-            </div>
+            <FooterBottom handleClick={this.handleClick} className={styles['btn']} type="primary">领取任务</FooterBottom>
         </div>
     }
 }
 
-export default HandleWorkOrder
+export default ReceiveWorkOrder

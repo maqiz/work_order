@@ -1,5 +1,11 @@
 @import '@/global.module.scss';
-
+.container{
+    :global{
+        .empty-container{
+            padding: 50px 0;
+        }
+    }
+}
 .status-title{
     font-size: 36px;
     font-weight: normal;

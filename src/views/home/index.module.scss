@@ -1,12 +1,4 @@
 @import '@/global.module.scss';
-:global{
-    .amap-logo{
-        display: none !important;
-    }
-    .amap-copyright{
-        display: none !important;
-    }
-}
 .container{
     display: flex;
     flex-direction: column;
@@ -54,7 +46,14 @@
     width: 100%;
     height: 100%;
 }
-
+.marker-label{
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: inherit;
+    white-space: nowrap;
+    background-color: #fff;
+}
 .vehicle{
     position: absolute;
     z-index: 9999;
@@ -89,7 +88,7 @@
 }
 .vehicle-info-item{
     width: 50%;
-    padding: 20px;
+    padding: 20px 0;
     color: $color999;
     @include line-limit()
 }
@@ -97,13 +96,17 @@
     color: initial;
 }
 .vehicle-bottom{
+    padding: 20px;
     border-top: 1px solid $borderColorPrimary;
 }
 .vehicle-billing,.vehicle-address{
+    display: flex;
+    align-items: center;
     padding: 20px 0;
     @include line-limit();
     :global{
         .iconfont{
+            font-size: 30px;
             margin-right: 10px;
             color: $primary;
         }

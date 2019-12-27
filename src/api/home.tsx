@@ -10,4 +10,5 @@ export default {
 
     /* 根据地图可视化区域获取车辆列表 */
     fetchVehicleCluster: (params: any = {}, url: string) => Axios.get(url, params),
+
 }

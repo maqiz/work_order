@@ -30,12 +30,12 @@ const menuDataList = [
         link: '/vehicle',
         subLink: ['/vehicle/list']
     },
-    {
-        name: '我',
-        iconfont: 'iconuser',
-        link: '/center',
-        subLink: ['/center']
-    }
+    // {
+    //     name: '我',
+    //     iconfont: 'iconuser',
+    //     link: '/center',
+    //     subLink: ['/center']
+    // }
 ]
 
 class Menu extends React.Component<IProps>{

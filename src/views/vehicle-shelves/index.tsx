@@ -2,6 +2,7 @@ import * as React from 'react'
 import Amap from '@/components/Map'
 import LabelList from '@/components/labelList'
 import { RouteComponentProps } from 'react-router-dom'
+import { Marker } from 'react-amap'
 import { Checkbox, Toast } from 'antd-mobile'
 import FooterBottom from '@/components/FooterButton'
 import { throttle } from 'lodash'
@@ -18,7 +19,19 @@ interface IProps extends RouteComponentProps{
 
 
 class Vehicle extends React.Component<IProps>{
+    amapEvents: { created: (map: any) => void; }
+    map: any
 
+    constructor(props: any){
+        super(props);
+        // 地图事件
+        this.amapEvents = {
+            created: (map: any) => {
+                this.map = map
+            }
+        }
+    }
+    
     state = {
         vehicleUnid: '',
         labelDataList: [
@@ -44,18 +57,28 @@ class Vehicle extends React.Component<IProps>{
             { value: 1, label: '已清理车内异物喝垃圾', checked: false },
             { value: 2, label: '车辆移动到指定投放地点', checked: false },
         ],
+        markerPosition: undefined,
+        markerExtData: null
     }
 
     fetchVehicleInfoData = (vehicleUnid: string) => {
         const { labelDataList } = this.state
         VehicleApi.fetchVehicleInfoData({}, `/vehicle_mtng/${vehicleUnid}`).then( data => {
-            const { licence, addr, endurance, datime_last }: any = data
+            const { licence, addr, endurance, datime_last, lond, latd, avatar }: any = data
+            const markerPosition = {longitude: lond, latitude: latd}
+            const markerExtData = { avatar}
             labelDataList[0] = {...labelDataList[0], desc: licence}
             labelDataList[1] = {...labelDataList[1], desc: addr}
             labelDataList[2] = {...labelDataList[2], desc: `${endurance}公里`}
             labelDataList[3] = {...labelDataList[3], desc: datime_last}
             this.setState({
+                markerExtData,
+                markerPosition,
                 labelDataList
+            }, () => {
+                setTimeout(() => {
+                    this.map && this.map.setFitView()
+                }, 200)
             })
             console.log(data)
         }).catch( error => {
@@ -116,6 +139,15 @@ class Vehicle extends React.Component<IProps>{
         trailing: false
     })
 
+    /* 渲染车辆 */
+    renderMarker = (extData: any )=> {
+        if ( extData ) {
+            const { avatar } = extData
+            return <img style={{ width: '64px'}} src={avatar} alt=''/> 
+        }
+        return null
+    }
+
     componentDidMount(){
         document.title = '上架车辆'
         const { location } = this.props
@@ -134,11 +166,16 @@ class Vehicle extends React.Component<IProps>{
     }
 
     render(){
-        const { labelDataList, checkDataList } = this.state
+        const { labelDataList, checkDataList, markerPosition, markerExtData } = this.state
+        console.log(markerPosition)
         return <div className={`ignore-container`}>
             <div className={styles['content']}>
                 <div className={styles['map']}>
-                    <Amap />
+                    <Amap events={this.amapEvents}>
+                        {
+                            markerPosition && <Marker position={markerPosition} render={this.renderMarker} extData={markerExtData} />
+                        }
+                    </Amap>
                 </div>
                 <LabelList className={styles['info']} data={labelDataList} />
                 <div className={styles['checkbox']}>

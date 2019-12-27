@@ -123,9 +123,10 @@ module.exports = function(webpackEnv) {
                 viewportHeight: 1334,
                 unitPrecision: 3,
                 viewportUnit: 'vw',
-                selectorBlackList: ['.ignore', '.hairlines', '.am'],
+                selectorBlackList: ['.ignore', '.hairlines', '.am', '.iconfont'],
                 minPixelValue: 1,
-                mediaQuery: false
+                mediaQuery: false,
+                exclude: /node_modules/
             }),
             require("postcss-viewport-units"),
             require("cssnano")({

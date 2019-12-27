@@ -5,14 +5,17 @@ import Cache from '@/utils/cache'
 const baseUrl = process.env.NODE_ENV === 'production' ? 'https://api.ezcarsharing.com/lancer/' : 'https://api.ezcarsharing.com/lancer/';
 
 
-const handleErrorTips = (status: number) => {
+const handleErrorTips = (status: number, data: any) => {
     switch (status) {
+        case 400:
+            Toast.fail(data ? (data.error_description || data.text || '请求错误') : '请求错误')
+            break;
         case 401:
-            Toast.fail('未登录')
+            Toast.fail('未登录,请重新刷新页面')
             Cache.clear()
             break;
         case 403:
-            Toast.fail('没有权限')
+            Toast.fail(data ? (data.text || '没有权限') : '没有权限')
             break;
         case 500:
             Toast.fail('服务器错误')
@@ -42,9 +45,7 @@ const Axios = axios.create({
 // 添加请求拦截器
 Axios.interceptors.request.use( (config: AxiosRequestConfig) => {
     const { method } = config
-    // 在发送请求之前做些什么
     // 请求 access_token，登录后每个请求都带上
-    config.headers.Authorization = 'Bearer ttronf8ab323dcdfce2b2625219bd3fe'
     if (Cache.getItem('access_token')) {
         config.headers.Authorization = `Bearer ${Cache.getItem('access_token')}`;
     }
@@ -63,11 +64,13 @@ Axios.interceptors.response.use( (response: AxiosResponse) => {
     if( response.status === 404) {
         return Promise.reject(response);
     }
+    console.log(response)
     return response.data;
 }, (error: AxiosError) => {
     // 对响应错误做点什么
     if (error.response) {
-        handleErrorTips(error.response.status)
+        const { status, data } = error.response
+        handleErrorTips(status, data)
     }
     return Promise.reject(error);
 });

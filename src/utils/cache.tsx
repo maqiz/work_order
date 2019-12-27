@@ -3,8 +3,14 @@ const PREFIX = 'cache_';
 export default class Cache {
     static getItem(k: string | number): any{
         try {
-            const result = localStorage.getItem(PREFIX + k)
-            return typeof result === 'string' ? JSON.parse(result) : result
+            // const result: string | null = localStorage.getItem(PREFIX + k)
+            // if( result ) {
+            //     console.log(result, JSON.parse(result))
+            //     return JSON.parse(result)
+            // } else {
+            //     return ''
+            // }
+            return localStorage.getItem(PREFIX + k)
         } catch (e) {
             return undefined
         }

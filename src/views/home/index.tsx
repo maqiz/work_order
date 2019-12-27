@@ -1,11 +1,10 @@
 import * as React from 'react'
 import Amap from '@/components/Map'
-import { Markers } from 'react-amap'
+import { Markers, Marker } from 'react-amap'
 import { RouteComponentProps } from 'react-router';
 import styles from './index.module.scss'
 import HomeApi from '@/api/home'
 import { throttle } from 'lodash'
-import Item from 'antd-mobile/lib/popover/Item';
 
 
 interface IProps extends RouteComponentProps {
@@ -48,7 +47,7 @@ class Home extends React.Component<IProps, IState>{
     }
 
     public readonly state: Readonly<IState> = {
-        isShowVehicle: true,
+        isShowVehicle: false,
         vehicleTotalCount: 0,
         infoData: [
             {
@@ -86,6 +85,10 @@ class Home extends React.Component<IProps, IState>{
                         latitude: data.latd
                     },
                     image: data.avatar,
+                    licence: data.licence,
+                    flag_ava: data.flag_ava,
+                    flag_mtng: data.flag_mtng,
+                    flag_rent: data.flag_rent,
                     data: data
                 }
             })
@@ -178,7 +181,7 @@ class Home extends React.Component<IProps, IState>{
             
         }
     }
-  
+
     componentDidMount(){
         document.title = '运维首页'
         this.fetchVehicleSummary()
@@ -217,22 +220,37 @@ class Home extends React.Component<IProps, IState>{
                         render={this.renderMarkerFn}
                         events={this.markersEvents}
                         markers={markers}
-                    />
+                    >
+                    </Markers>
+                    {
+                        Array.isArray(markers) && markers.map((item, index) => {
+                            return <Marker
+                                position={item.position}
+                                offset={[-10, -55]}
+                                zIndex={1}
+                            >
+                                <div style={{color: item.flag_ava === true ? '#000' : item.flag_mtng === true ? '#e94f4f' : '#0084ff'}} className={styles['marker-label']}>
+                                    {item.licence}
+                                </div>
+
+                            </Marker>
+                        })
+                    }
                 </Amap>
             </div>
 
             <div ref={(ref: HTMLDivElement) => {this.vehicleEl = ref}} className={ isShowVehicle ? styles['vehicle'] : `${styles['vehicle']} ${styles['hide']}`}>
                 {
-                    <React.Fragment>
+                    vehicleInfoData && <React.Fragment>
                         <div className={styles['vehicle-img']}>
-                            {/* <img src={vehicleInfoData.avatar} alt=""/> */}
+                            <img src={vehicleInfoData.avatar} alt=""/>
                         </div>
-                        {/* <h2 className={styles['vehicle-title']}>{vehicleInfoData.name}</h2> */}
+                        <h2 className={styles['vehicle-title']}>{vehicleInfoData.name}</h2>
                         <div className={styles['vehicle-info-list']}>
-                            {/* <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.licence}</span></div>
+                            <div className={styles['vehicle-info-item']}>车牌号码：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.licence}</span></div>
                             <div className={styles['vehicle-info-item']}>座位：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.seats}座</span></div>
                             <div className={styles['vehicle-info-item']}>续航里程: <span className={styles['vehicle-info-item-name']}>{vehicleInfoData.endurance}公里</span></div>
-                            <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.distance}米</span></div> */}
+                            <div className={styles['vehicle-info-item']}>距离：<span className={styles['vehicle-info-item-name']}>{vehicleInfoData.distance}米</span></div>
                         </div>
                         <div className={styles['vehicle-bottom']}>
                             <div className={styles['vehicle-billing']}><i className='iconfont iconchangyongtubiao_jifei'/>6元/小时+0.6/公里</div>

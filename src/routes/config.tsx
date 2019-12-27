@@ -41,6 +41,13 @@ const routerNotMenu = [
         component: Loadable(() => import('@/views/handle-work-order'))
     },
     {
+        key: 'receiveWorkOrder',
+        exact: true,
+        auth: true,
+        path: '/receiveWorkOrder',
+        component: Loadable(() => import('@/views/receive-work-order'))
+    },
+    {
         key: 'vehicleShelves',
         exact: true,
         auth: true,

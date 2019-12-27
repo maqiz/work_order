@@ -1,18 +1,18 @@
 @import '@/global.module.scss';
 
-.container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 30%;
-    color: $color999;
-    :global{
-        .iconfont{
+:global{
+    .empty-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 30%;
+        color: $color999;
+        i{
             font-size: 140px;
         }
+        .empty-title{
+            font-size: 32px;
+            margin-top: 20px;
+        }
     }
-}
-.title{
-    font-size: 32px;
-    margin-top: 20px;
 }

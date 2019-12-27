@@ -1,32 +1,53 @@
 @import '@/global.module.scss';
-.container{
-    min-height: 100%;
-    background-color: $backgroundColorPrimary;
+.content{
+    overflow: auto;
 }
-
-.vehicle-item{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
+.map{
+    height: 500px;
+}
+.info{
     padding: 20px;
-    margin-bottom: 20px;
-}
-.vehicle-img{
-    width: 200px;
-    padding-right: 20px;
-    text-align: center;
-}
-.vehicle-info{
-    flex: 1;
-    @include line-limit();
-}
-.vehicle-info-item{
-    @include line-limit();
-    padding: 10px 0;
+    font-size: 34px;
     :global{
-        .iconfont{
-            margin-right: 10px;
+        .labelList-item-name{
+            width: initial;
         }
     }
+}
+.checkbox{
+    :global{
+        .am-list-item{
+            background-color: initial;
+        }
+    }
+}
+.textarea-wrap{
+    padding: 0 20px;
+}
+
+.textarea{
+    width: 100%;
+    border: 1px solid $borderColorPrimary;
+    padding: 10px;
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+.btn{
+    display: flex;
+    justify-content: space-between;
+    position: absolute !important;
+    bottom: 0;
+    width: 100%;
+    padding: 0 20px 20px;
+    box-sizing: border-box;
+    :global{
+        .am-button{
+            flex: 1;
+        }
+    }
+}
+.btn-cancel{
+    background-color: #ddd;
+    margin-right: 20px;
 }
