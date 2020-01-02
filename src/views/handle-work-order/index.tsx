@@ -100,15 +100,14 @@ class HandleWorkOrder extends React.Component<IProps>{
         const { history } = this.props
         const { workOrderUnid, comment } = this.state
         try {
-            const params: IParams = {
-                unid: workOrderUnid,
-            }
+            const params = new URLSearchParams()
+            params.append('unid', workOrderUnid)
             if( type === 'done' ) {
                 if( !check.notEmpty(comment) ) {
                     Toast.info('请输入备注内容')
                     return false
                 } else {
-                    params.comment = comment
+                    params.append('comment', comment)
                 }
             }
             WorkOrderApi.receiveWorkOrder(params, `/work_order/${workOrderUnid}/${type}`).then( data => {

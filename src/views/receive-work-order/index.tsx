@@ -94,9 +94,8 @@ class ReceiveWorkOrder extends React.Component<IProps>{
         const { history } = this.props
         const { workOrderUnid } = this.state
         try {
-            const params = {
-                unid: workOrderUnid
-            }
+            const params = new URLSearchParams();
+            params.append('unid', workOrderUnid)
             WorkOrderApi.receiveWorkOrder(params, `/work_order/${workOrderUnid}/apply`).then( data => {
                 Toast.success('工单任务领取成功')
                 setTimeout(history.goBack, 500)

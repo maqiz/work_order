@@ -92,9 +92,8 @@ class Vehicle extends React.Component<IProps>{
         const { history } = this.props
         const { vehicleUnid } = this.state
 
-        const params = {
-            comment
-        }
+        const params = new URLSearchParams();
+        params.append('comment', comment)
         
         VehicleApi.submitShelvesVehicle(params, `/vehicle_mtng/${vehicleUnid}/ava`).then( data => {
             Toast.success('上架成功')

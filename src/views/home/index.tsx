@@ -2,9 +2,12 @@ import * as React from 'react'
 import Amap from '@/components/Map'
 import { Markers, Marker } from 'react-amap'
 import { RouteComponentProps } from 'react-router';
+import { Toast } from 'antd-mobile';
 import styles from './index.module.scss'
 import HomeApi from '@/api/home'
 import { throttle } from 'lodash'
+import wxConfig from '@/wxConfig'
+wxConfig()
 
 
 interface IProps extends RouteComponentProps {
@@ -30,7 +33,6 @@ class Home extends React.Component<IProps, IState>{
         this.amapEvents = {
             created: (map: any) => {
                 this.map = map
-                this.mapMoveEnd()
                 map.on('moveend', this.mapMoveEnd);
             }
         }
@@ -78,7 +80,7 @@ class Home extends React.Component<IProps, IState>{
 
         HomeApi.fetchVehicleCluster({params}, '/vehicle_mtng/cluster/4856712C981340B0A6A10B77861F2411').then((data: any) => {
             const markers = data.map( (item: any) => {
-                const data = item.vehicles.vehicle[0]
+                const data = item.vehicles[0]
                 return {
                     position: {
                         longitude: data.lond,
@@ -181,12 +183,42 @@ class Home extends React.Component<IProps, IState>{
             
         }
     }
+    /* 微信定位 */
+    wxGolocation(){
+        try {
+            const wx = (window as any).wx
+            wx.ready(() => {
+                wx.getLocation({
+                    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    success: (res: any) => {
+                        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                        if( this.map ) {
+                            this.map.setZoomAndCenter(20, [longitude, latitude])
+                        }
+                    },cancel : function(res: any){
+                        Toast.info('您拒绝了地理定位')
+                        /* 失败也获取车辆 */
+                        this.mapMoveEnd()
+                    },fail : function(){
+                        Toast.fail('定位失败')
+                        /* 失败也获取车辆 */
+                        this.mapMoveEnd()
+                    }
+                });
+            });
+        } catch (error) {
+            /* 失败也获取车辆 */
+            this.mapMoveEnd()
+        }
+	}
 
     componentDidMount(){
         document.title = '运维首页'
         this.fetchVehicleSummary()
         this.fetchWorkOrderSummary()
         this.eventInit()
+        this.wxGolocation()
     }
 
     componentWillUnmount(){

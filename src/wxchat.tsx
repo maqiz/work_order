@@ -1,4 +1,3 @@
-import Axios from '@/api/index'
 import axios, {AxiosResponse} from 'axios'
 import Cache from '@/utils/cache'
 import check from '@/utils/check-form'
@@ -70,4 +69,4 @@ const fetchAccessToken = async (code: string) => {
     })
 }
 
-export { fetchCode, fetchAccessToken }
+export { fetchCode, fetchAccessToken, wechatUnid }
