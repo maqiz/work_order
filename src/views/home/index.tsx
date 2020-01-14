@@ -66,7 +66,21 @@ class Home extends React.Component<IProps, IState>{
             }
         ],
         markers: [],
-        vehicleInfoData: null
+        vehicleInfoData: null,
+        flagList: [
+            {
+                name: '出租中',
+                color: '#0084ff'
+            },
+            {
+                name: '空闲',
+                color: '#000'
+            },
+            {
+                name: '维护中',
+                color: '#e94f4f'
+            }
+        ]
     }
 
     /* 根据地图可视化区域获取车辆列表 */
@@ -227,7 +241,7 @@ class Home extends React.Component<IProps, IState>{
 
     render(){
         
-        const { infoData, vehicleTotalCount, markers, isShowVehicle, vehicleInfoData } = this.state
+        const { infoData, vehicleTotalCount, markers, isShowVehicle, vehicleInfoData, flagList } = this.state
 
         return <div className={styles['container']}>
             <div className={styles['info']}>
@@ -241,6 +255,16 @@ class Home extends React.Component<IProps, IState>{
                             return <li key={index} className={styles['info-item']}>
                             <div className={styles['info-number']}>{item.value}</div>
                             <div className={styles['info-nane']}>{item.name}</div>
+                        </li>
+                        })
+                    }
+                </ul>
+                <ul className={styles['flag-list']}>
+                    {
+                        flagList.map( (item: any, index: number) => {
+                            return <li key={index} className={styles['flag-item']}>
+                            <span style={{backgroundColor: item.color}} className={styles['flag-item-circle']}></span>
+                            <span>{item.name}</span>
                         </li>
                         })
                     }
@@ -261,10 +285,9 @@ class Home extends React.Component<IProps, IState>{
                                 offset={[-10, -55]}
                                 zIndex={1}
                             >
-                                <div style={{color: item.flag_ava === true ? '#000' : item.flag_mtng === true ? '#e94f4f' : '#0084ff'}} className={styles['marker-label']}>
+                                <div style={{color: item.flag_rent === true ? '#0084ff' : item.flag_ava === true ? '#000' : item.flag_mtng === true ? '#e94f4f' : '#000'}} className={styles['marker-label']}>
                                     {item.licence}
                                 </div>
-
                             </Marker>
                         })
                     }

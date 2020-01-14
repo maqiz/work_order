@@ -26,7 +26,7 @@
 .info-list{
     display: flex;
     justify-content: space-around;
-    padding: 100px;
+    padding: 60px 40px 40px;
 }
 .info-item{
     display: flex;
@@ -40,6 +40,23 @@
 .info-nane{
     margin-top: 20px;
     font-size: 28px;
+}
+
+.flag-list{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.flag-item{
+    display: flex;
+    align-items: center;
+}
+.flag-item-circle{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
 .map{
